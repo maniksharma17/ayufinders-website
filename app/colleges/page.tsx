@@ -141,7 +141,7 @@ export default function CollegesPage() {
               <CardContent>
                 <div className="flex flex-col md:flex-row w-full gap-x-6 justify-around">
                   <div className="w-full">
-                    <Label className="text-sm text-gray-700 font-medium block mb-2">
+                    <Label className="text-sm text-gray-700 font-medium block mt-2 mb-1">
                       Search by name, state or city
                     </Label>
                     <Input
@@ -155,7 +155,7 @@ export default function CollegesPage() {
                   </div>
 
                   <div className="w-full">
-                    <Label className="text-sm text-gray-700 font-medium block mb-2">
+                    <Label className="text-sm text-gray-700 font-medium block mt-2 mb-1">
                       Region
                     </Label>
                     <Select onValueChange={setRegion}>
@@ -175,7 +175,7 @@ export default function CollegesPage() {
                   </div>
 
                   <div className="w-full">
-                    <Label className="text-sm text-gray-700 font-medium block mb-2">
+                    <Label className="text-sm text-gray-700 font-medium block mt-2 mb-1">
                       Rating
                     </Label>
                     <Select onValueChange={setRating}>
@@ -199,7 +199,7 @@ export default function CollegesPage() {
           {/* Colleges Section */}
           <div className="w-full">
             <Tabs defaultValue="all" className="mb-10">
-              <TabsList className="mb-6 max-md:bg-transparent max-md:flex-wrap">
+              <TabsList className="max-md:mb-12 mb-6 max-md:bg-transparent max-md:flex-wrap">
                 {categories.map((cat) => (
                   <TabsTrigger
                     key={cat}
