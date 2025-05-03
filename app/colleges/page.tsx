@@ -121,6 +121,7 @@ export default function CollegesPage() {
     <div className="mt-20 flex flex-col min-h-screen">
       {/* Banner */}
       <Banner
+        className="max-md:h-[70vh]"
         title="Explore B.A.M.S. Colleges"
         subtitle="Find the perfect institution for your Ayurvedic education journey"
         imageUrl="https://images.unsplash.com/photo-1592066575517-58df903152f2?q=80&w=3098&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
