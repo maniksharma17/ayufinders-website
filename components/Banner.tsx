@@ -19,7 +19,7 @@ const Banner: React.FC<BannerProps> = ({
 }) => {
   return (
     <div className='max-md:px-4'>
-    <div className={cn("md:mt-8 banner shadow-xl rounded-2xl container mx-auto flex flex-col md:flex-row justify-center", className)}>
+    <div className={cn("md:mt-8 banner shadow-sm md:shadow-xl rounded-2xl container mx-auto flex flex-col md:flex-row justify-center", className)}>
       <div className='w-full h-1/2 md:h-full relative'>
         <Image
           src={imageUrl}
