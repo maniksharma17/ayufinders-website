@@ -145,9 +145,9 @@ export default function LatestUpdatesPage() {
               title="Select Category"
               className="max-md:mb-0 mb-4"
               />
-              <TabsList className="max-md:mb-16 mb-6 max-md:flex-wrap bg-transparent">
+              <TabsList className="max-md:mb-16 mb-6 max-md:flex-wrap max-md:bg-transparent">
                 {categories.map((category) => (
-                  <TabsTrigger className="bg-gray-100 m-1" key={category} value={category}>
+                  <TabsTrigger className="max-md:bg-gray-100 max-md:m-1" key={category} value={category}>
                     {category}
                   </TabsTrigger>
                 ))}

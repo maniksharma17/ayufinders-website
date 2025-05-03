@@ -138,7 +138,7 @@ export default function CollegesPage() {
                 <CardTitle>Filters</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-row w-full gap-x-6 justify-around">
+                <div className="flex flex-col md:flex-row w-full gap-x-6 justify-around">
                   <div className="w-full">
                     <Label className="text-sm text-gray-700 font-medium block mb-2">
                       Search by name, state or city
@@ -198,10 +198,11 @@ export default function CollegesPage() {
           {/* Colleges Section */}
           <div className="w-full">
             <Tabs defaultValue="all" className="mb-10">
-              <TabsList className="mb-6">
+              <TabsList className="mb-6 max-md:bg-transparent max-md:flex-wrap">
                 {categories.map((cat) => (
                   <TabsTrigger
                     key={cat}
+                    className="max-md:bg-gray-100 max-md:m-1"
                     value={cat.toLowerCase()}
                     onClick={() => setCategory(cat)}
                   >
