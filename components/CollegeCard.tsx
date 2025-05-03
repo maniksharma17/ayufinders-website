@@ -24,7 +24,7 @@ const CollegeCard: React.FC<CollegeCardProps> = ({
   title_url,
 }) => {
   return (
-    <Card className="max-md:flex-row max-md:flex border-none overflow-hidden transition-all shadow-md hover:shadow-lg">
+    <Card className="max-md:flex-row max-md:flex border-none overflow-hidden transition-all shadow md:shadow-md hover:shadow-lg">
       <div className="max-md:w-1/3 aspect-video bg-gray-100 relative overflow-hidden">
         <Image
           src={`https://ayufinders.com/jeni/superera/media/banner/${image}`}

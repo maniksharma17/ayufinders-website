@@ -199,7 +199,7 @@ export default function CollegesPage() {
           {/* Colleges Section */}
           <div className="w-full">
             <Tabs defaultValue="all" className="mb-10">
-              <TabsList className="max-md:mb-12 mb-6 max-md:bg-transparent max-md:flex-wrap">
+              <TabsList className="max-md:mb-20 mb-6 max-md:bg-transparent max-md:flex-wrap">
                 {categories.map((cat) => (
                   <TabsTrigger
                     key={cat}
@@ -216,7 +216,7 @@ export default function CollegesPage() {
               {categories.map((cat) => (
                 <TabsContent key={cat} value={cat.toLowerCase()}>
                   {paginatedColleges.length === 0 && <div className="mx-auto w-full text-gray-700 font-medium">No colleges found</div>}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-8 gap-x-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-md:gap-y-3 gap-y-8 gap-x-3">
                     {paginatedColleges.map((college: any) => (
                       <CollegeCard key={college.id} {...college} />
                     ))}
