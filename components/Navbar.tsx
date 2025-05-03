@@ -48,7 +48,7 @@ const Navbar = () => {
 
           <div className="flex justify-flex-start items-center gap-12"> 
             <Link href="/" className="flex items-center gap-2">
-              <span className="tracking-tight text-lg md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              <span className="tracking-tight text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
                 AyuFinders
               </span>
             </Link>
