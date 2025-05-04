@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Banner from "@/components/Banner";
 import CollegeCard from "@/components/CollegeCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,10 +14,12 @@ import SearchComponent from "@/components/SearchComponent";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 interface College {
   id: number;
   college: string;
+  title: string;
   image: string;
   city_name: string;
   state_name: string;
@@ -31,13 +33,13 @@ interface College {
 export default function CollegesPage() {
   const [colleges, setColleges] = useState<College[]>([]);
   const [filteredColleges, setFilteredColleges] = useState<College[]>([]);
-  const [category, setCategory] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [rating, setRating] = useState("All");
-  const [region, setRegion] = useState("All");
+  const [category, setCategory] = useState(sessionStorage.getItem("category")||"");
+  const [searchTerm, setSearchTerm] = useState(sessionStorage.getItem("searchTerm")||"");
+  const [rating, setRating] = useState(sessionStorage.getItem("rating")||"All")
+  const [region, setRegion] = useState(sessionStorage.getItem("region")||"All");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const ITEMS_PER_PAGE = 12;
+  const ITEMS_PER_PAGE = 48;
   const [paginatedColleges, setPaginatedColleges] = useState<College[]>([]);
 
   // Categories
@@ -50,6 +52,41 @@ export default function CollegesPage() {
     "Central Universities",
     "National Institute ",
   ];
+
+  const isLoadedFromStorage = useRef(false);
+
+  useEffect(() => {
+    sessionStorage.setItem("searchTerm", searchTerm);
+    sessionStorage.setItem("category", category);
+    sessionStorage.setItem("region", region);
+    sessionStorage.setItem("rating", rating);
+  }, [searchTerm, category, region, rating]);
+  
+  useEffect(() => {
+    const savedPosition = sessionStorage.getItem("scrollPosition");
+    const savedSearch = sessionStorage.getItem("searchTerm");
+    const savedRegion = sessionStorage.getItem("region");
+    const savedRating = sessionStorage.getItem("rating");
+    const savedCategory = sessionStorage.getItem("category");
+
+    isLoadedFromStorage.current = true;
+
+    setTimeout(()=>{
+      if (savedSearch) setSearchTerm(savedSearch);
+      if (savedRegion) setRegion(savedRegion);
+      if (savedRating) setRating(savedRating);
+      if (savedCategory) setCategory(savedCategory);
+    
+      if (savedPosition) {
+        window.scrollTo(0, parseInt(savedPosition));
+        sessionStorage.removeItem("scrollPosition");
+      }
+    }, 1000)
+  
+    
+  }, []);
+  
+  
 
   useEffect(() => {
     const fetchColleges = async () => {
@@ -74,7 +111,7 @@ export default function CollegesPage() {
 
   useEffect(() => {
     setPaginatedColleges(filteredColleges.slice(start, end));
-  }, [page, colleges, totalPages, filteredColleges]);
+  }, [page, colleges, totalPages, filteredColleges, end, start]);
 
   const handleNext = () => {
     if (page < totalPages) {
@@ -89,33 +126,35 @@ export default function CollegesPage() {
   };
 
   useEffect(() => {
+    if (!isLoadedFromStorage.current) return;
     const filtered = colleges.filter((college: any) => {
       const matchesCategory =
         category === "" ||
         category === "All" ||
         college.category_name?.toLowerCase() === category.toLowerCase();
-  
+
       const matchesSearch =
         !searchTerm ||
         college.college?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         college.city_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         college.state_name?.toLowerCase().includes(searchTerm.toLowerCase());
-  
-      const matchesRating = rating === "All" || college.review === Number(rating);
+
+      const matchesRating =
+        rating === "All" || college.review === Number(rating);
 
       const matchesRegion =
         region === "All" ||
         college.direction_name?.toLowerCase() === region.toLowerCase();
-  
+
       return matchesCategory && matchesSearch && matchesRating && matchesRegion;
     });
-  
+
     setFilteredColleges(filtered);
     setPage(1);
     setPaginatedColleges(filtered.slice(0, ITEMS_PER_PAGE));
     setTotalPages(Math.ceil(filtered.length / ITEMS_PER_PAGE));
-  }, [colleges, category, searchTerm, rating, region]);
-  
+    scrollTo(0, 500)
+  }, [colleges, category, searchTerm, rating, region, isLoadedFromStorage]);
 
   return (
     <div className="mt-20 flex flex-col min-h-screen">
@@ -131,15 +170,15 @@ export default function CollegesPage() {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-16">
-        <div className="flex flex-col items-start gap-8">
+        <div className="flex flex-col md:flex-row items-start gap-8">
           {/* Filters Section */}
-          <div className="w-full">
+          <div className="w-full lg:sticky top-32">
             <Card>
               <CardHeader>
                 <CardTitle>Filters</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-col md:flex-row w-full gap-x-6 justify-around">
+                <div className="flex flex-col w-full gap-x-6 justify-around">
                   <div className="w-full">
                     <Label className="text-sm text-gray-700 font-medium block mt-2 mb-1">
                       Search by name, state or city
@@ -150,15 +189,34 @@ export default function CollegesPage() {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="w-full"
-                    >
-                    </Input>
+                    ></Input>
+                  </div>
+
+                  <div className="w-full">
+                    <Label className="text-sm text-gray-700 font-medium block mt-2 mb-1">
+                      College Type
+                    </Label>
+                    <Select value={category} onValueChange={setCategory}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="All" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((cat) => {
+                          return (
+                            <SelectItem key={cat} value={cat}>
+                              {cat}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="w-full">
                     <Label className="text-sm text-gray-700 font-medium block mt-2 mb-1">
                       Region
                     </Label>
-                    <Select onValueChange={setRegion}>
+                    <Select value={region} onValueChange={setRegion}>
                       <SelectTrigger>
                         <SelectValue placeholder="All" />
                       </SelectTrigger>
@@ -178,7 +236,7 @@ export default function CollegesPage() {
                     <Label className="text-sm text-gray-700 font-medium block mt-2 mb-1">
                       Rating
                     </Label>
-                    <Select onValueChange={setRating}>
+                    <Select value={rating} onValueChange={setRating}>
                       <SelectTrigger>
                         <SelectValue placeholder="All" />
                       </SelectTrigger>
@@ -190,7 +248,6 @@ export default function CollegesPage() {
                       </SelectContent>
                     </Select>
                   </div>
-
                 </div>
               </CardContent>
             </Card>
@@ -215,10 +272,19 @@ export default function CollegesPage() {
               {/* College Cards */}
               {categories.map((cat) => (
                 <TabsContent key={cat} value={cat.toLowerCase()}>
-                  {paginatedColleges.length === 0 && <div className="mx-auto w-full text-gray-700 font-medium">No colleges found</div>}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-md:gap-y-3 gap-y-8 gap-x-3">
+                  {paginatedColleges.length === 0 && (
+                    <div className="mx-auto w-full text-gray-700 font-medium">
+                      No colleges found
+                    </div>
+                  )}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-md:gap-y-3 gap-y-8 gap-x-3">
                     {paginatedColleges.map((college: any) => (
-                      <CollegeCard key={college.id} {...college} />
+                      <CollegeCard 
+                      searchTerm={searchTerm}
+                      region={region}
+                      rating={rating}
+                      category={category}
+                      key={college.id} {...college} />
                     ))}
                   </div>
                 </TabsContent>
@@ -251,6 +317,20 @@ export default function CollegesPage() {
           </div>
         </div>
       </div>
+      {/* CTA Section */}
+      <section className="container mx-auto mb-6 bg-primary/5 rounded-2xl p-8 md:p-12 text-center">
+        <h2 className="text-3xl font-bold mb-4">
+          Need Help with Your BAMS Journey?
+        </h2>
+        <p className="max-w-2xl mx-auto mb-6 text-muted-foreground">
+          Our team of experts is ready to guide you through the process of
+          finding the right college, preparing for admissions, and planning your
+          career in Ayurvedic medicine.
+        </p>
+        <Button size="lg" className="rounded-full px-8">
+          Get Expert Counselling
+        </Button>
+      </section>
     </div>
   );
 }

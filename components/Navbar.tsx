@@ -54,7 +54,7 @@ const Navbar = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="h-full hidden md:flex items-center gap-6">
+            <nav className="h-full hidden lg:flex items-center gap-6">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -74,7 +74,7 @@ const Navbar = () => {
 
           {/* Call Button */}
           <Button
-            className="hover:bg-gradient-to-r text-gray-100 transition-all duration-300 ease-in-out cursor-pointer from-primary to-gray-400 hidden md:flex items-center font-light text-lg gap-2 rounded-full"
+            className="hover:bg-gradient-to-r text-gray-100 transition-all duration-300 ease-in-out cursor-pointer from-primary to-gray-400 hidden lg:flex items-center font-light text-lg gap-2 rounded-full"
             size="lg"
           >
             <Phone className="h-5 w-5" />
@@ -82,7 +82,7 @@ const Navbar = () => {
           </Button>
 
           {/* Mobile Navigation */}
-          <div className="flex md:hidden">
+          <div className="flex lg:hidden">
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="rounded-full">

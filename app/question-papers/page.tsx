@@ -130,8 +130,6 @@ export default function QuestionPapersPage() {
             questionPapers.length 
             ? 
             <div>
-              
-
               <div className='grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-x-3 gap-y-6'>
                 {questionPapers.map((qp: any) => {
                   return <QuestionPaperCard 
@@ -140,6 +138,7 @@ export default function QuestionPapersPage() {
                   university={qp.university}
                   year={qp.year}
                   yearOfStudy={qp.paper_semester_year}
+                  downloadLink={qp.question_upload}
                   />
                 })}
               </div>
@@ -284,6 +283,7 @@ interface QuestionPaperCardProps {
   duration?: string;
   marks?: string;
   isModelPaper?: boolean;
+  downloadLink: string
 }
 
 const QuestionPaperCard: React.FC<QuestionPaperCardProps> = ({
@@ -294,6 +294,7 @@ const QuestionPaperCard: React.FC<QuestionPaperCardProps> = ({
   duration,
   marks,
   isModelPaper = false,
+  downloadLink
 }) => {
   return (
     <Card className="hover:shadow-md transition-all">
@@ -325,48 +326,14 @@ const QuestionPaperCard: React.FC<QuestionPaperCardProps> = ({
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full flex items-center gap-2">
-          <Download className="h-4 w-4" />
-          Download PDF
-        </Button>
+        <a href={`https://ayufinders.com/jeni/superera/media/banner/${downloadLink}`} download target="_blank" rel="noopener noreferrer" className="w-full">
+          <Button className="w-full flex items-center gap-2" variant="outline">
+            <Download className="h-4 w-4" />
+            Download PDF
+          </Button>
+        </a>
       </CardFooter>
     </Card>
   );
 };
 
-interface StudyMaterialCardProps {
-  title: string;
-  author: string;
-  pages: number;
-  category: string;
-}
-
-const StudyMaterialCard: React.FC<StudyMaterialCardProps> = ({
-  title,
-  author,
-  pages,
-  category,
-}) => {
-  return (
-    <Card className="hover:shadow-md transition-all">
-      <CardHeader className="pb-2">
-        <div className="flex justify-between items-start">
-          <CardTitle className="text-lg">{title}</CardTitle>
-          <div className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">
-            {category}
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <div className="text-sm text-muted-foreground">By {author}</div>
-        <div className="text-sm text-muted-foreground">{pages} Pages</div>
-      </CardContent>
-      <CardFooter>
-        <Button className="w-full flex items-center gap-2">
-          <Download className="h-4 w-4" />
-          Download PDF
-        </Button>
-      </CardFooter>
-    </Card>
-  );
-};

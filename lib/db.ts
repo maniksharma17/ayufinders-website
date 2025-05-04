@@ -132,6 +132,13 @@ export const getLatestUpdates = async () => {
   return results;
 };
 
+export const getLatestUpdatesById = async (id: string) => {
+  const sql =
+    "SELECT * FROM college_notification WHERE status='1' AND id = ? ORDER BY id DESC ";
+  const results = await query(sql, [id]);
+  return results;
+};
+
 export const getLatestJobs = async () => {
   const sql =
     "SELECT * FROM job_notifications WHERE status='1' ORDER BY id DESC";
@@ -139,10 +146,18 @@ export const getLatestJobs = async () => {
   return results;
 };
 
+export const getJobById = async (id: string) => {
+  const sql =
+    "SELECT * FROM job_notifications WHERE status='1'AND id = ? ORDER BY id DESC";
+  const results = await query(sql, [id]);
+  return results;
+};
+
 export const getColleges = async () => {
   const sql = `
   SELECT 
       c.college,
+      cd.title,
       cd.image,
       cd.review,
       bc.category AS state_name,
@@ -161,6 +176,47 @@ export const getColleges = async () => {
     LEFT JOIN college_type ct ON ct.id = cd.college_type
 `;
   const results = await query(sql);
+  return results;
+};
+
+export const getCollegeById = async (id: string) => {
+  const sql = `
+  SELECT 
+      c.*,
+      cd.*,
+      cat.id AS category_id,
+      bc.category AS state_name,
+      bsc.sub_cat AS city_name,
+      ct.college_type AS college_type,
+      d.direction AS direction_name,
+      cat.category AS category_name
+    FROM course_details cd
+    LEFT JOIN college c ON cd.college_id = c.id
+    LEFT JOIN category cat ON cd.cat_id = cat.id
+    LEFT JOIN banner_category bc ON bc.id = cd.state_id
+    LEFT JOIN banner_sub_category bsc ON bsc.id = cd.city_id
+    LEFT JOIN direction d ON d.id = cd.direction_id
+    LEFT JOIN college_type ct ON ct.id = cd.college_type
+    WHERE cd.id = ?
+`;
+  const results = await query(sql, [id]);
+  return results;
+};
+
+export const getRelatedColleges = async (state_id: string, category_id: string, city_id: string) => {
+
+  const sql = `
+  SELECT 
+      cd.title
+    FROM course_details cd
+    LEFT JOIN college c ON cd.college_id = c.id
+    LEFT JOIN category cat ON cd.cat_id = cat.id
+    LEFT JOIN banner_category bc ON bc.id = cd.state_id
+    LEFT JOIN banner_sub_category bsc ON bsc.id = cd.city_id
+    WHERE bc.id = ? AND cat.id = ? AND bsc.id = ?
+    LIMIT 4
+`;
+  const results = await query(sql, [state_id, category_id, city_id]);
   return results;
 };
 

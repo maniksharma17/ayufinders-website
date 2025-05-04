@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,6 +10,7 @@ import Image from 'next/image';
 interface CollegeCardProps {
   id: number;
   college: string;
+  title: string;
   state_name: string;
   image: string;
   city_id: string;
@@ -20,8 +22,7 @@ const CollegeCard: React.FC<CollegeCardProps> = ({
   college,
   state_name,
   image,
-  city_id,
-  title_url,
+  title,
 }) => {
   return (
     <Card className="max-md:flex-row max-md:flex border-none overflow-hidden transition-all shadow md:shadow-md hover:shadow-lg">
@@ -38,7 +39,7 @@ const CollegeCard: React.FC<CollegeCardProps> = ({
       <div className='max-md:w-2/3'>
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
-          <CardTitle className="text-lg line-clamp-2">{college}</CardTitle>
+          <CardTitle className="text-lg line-clamp-2">{college ?? title}</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="pb-2">
@@ -50,7 +51,9 @@ const CollegeCard: React.FC<CollegeCardProps> = ({
         </div>
       </CardContent>
       <CardFooter>
-        <Link href={`/colleges/${id}`} className="w-full">
+        <Link href={`/colleges/${id}`} className="w-full" onClick={()=>{
+          sessionStorage.setItem("scrollPosition", window.scrollY.toString());
+        }}>
           <Button variant="outline" className="w-full">View Details</Button>
         </Link>
       </CardFooter>
