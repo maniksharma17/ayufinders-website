@@ -96,7 +96,7 @@ export default function CollegesPage() {
         sessionStorage.removeItem("scrollPosition");
       }
     }, 2000);
-  }, []);
+  }, [paginatedColleges]);
 
   useEffect(() => {
     const fetchColleges = async () => {
