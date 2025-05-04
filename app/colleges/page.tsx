@@ -33,14 +33,29 @@ interface College {
 export default function CollegesPage() {
   const [colleges, setColleges] = useState<College[]>([]);
   const [filteredColleges, setFilteredColleges] = useState<College[]>([]);
-  const [category, setCategory] = useState(sessionStorage.getItem("category")||"");
-  const [searchTerm, setSearchTerm] = useState(sessionStorage.getItem("searchTerm")||"");
-  const [rating, setRating] = useState(sessionStorage.getItem("rating")||"All")
-  const [region, setRegion] = useState(sessionStorage.getItem("region")||"All");
+  
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const ITEMS_PER_PAGE = 48;
   const [paginatedColleges, setPaginatedColleges] = useState<College[]>([]);
+
+  const [category, setCategory] = useState("");
+const [searchTerm, setSearchTerm] = useState("");
+const [rating, setRating] = useState("All");
+const [region, setRegion] = useState("All");
+
+useEffect(() => {
+  const storedCategory = sessionStorage.getItem("category");
+  const storedSearchTerm = sessionStorage.getItem("searchTerm");
+  const storedRating = sessionStorage.getItem("rating");
+  const storedRegion = sessionStorage.getItem("region");
+
+  if (storedCategory) setCategory(storedCategory);
+  if (storedSearchTerm) setSearchTerm(storedSearchTerm);
+  if (storedRating) setRating(storedRating);
+  if (storedRegion) setRegion(storedRegion);
+}, []);
+
 
   // Categories
   const categories = [
