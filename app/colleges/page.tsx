@@ -33,29 +33,28 @@ interface College {
 export default function CollegesPage() {
   const [colleges, setColleges] = useState<College[]>([]);
   const [filteredColleges, setFilteredColleges] = useState<College[]>([]);
-  
+
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const ITEMS_PER_PAGE = 48;
   const [paginatedColleges, setPaginatedColleges] = useState<College[]>([]);
 
   const [category, setCategory] = useState("");
-const [searchTerm, setSearchTerm] = useState("");
-const [rating, setRating] = useState("All");
-const [region, setRegion] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [rating, setRating] = useState("All");
+  const [region, setRegion] = useState("All");
 
-useEffect(() => {
-  const storedCategory = sessionStorage.getItem("category");
-  const storedSearchTerm = sessionStorage.getItem("searchTerm");
-  const storedRating = sessionStorage.getItem("rating");
-  const storedRegion = sessionStorage.getItem("region");
+  useEffect(() => {
+    const storedCategory = sessionStorage.getItem("category");
+    const storedSearchTerm = sessionStorage.getItem("searchTerm");
+    const storedRating = sessionStorage.getItem("rating");
+    const storedRegion = sessionStorage.getItem("region");
 
-  if (storedCategory) setCategory(storedCategory);
-  if (storedSearchTerm) setSearchTerm(storedSearchTerm);
-  if (storedRating) setRating(storedRating);
-  if (storedRegion) setRegion(storedRegion);
-}, []);
-
+    if (storedCategory) setCategory(storedCategory);
+    if (storedSearchTerm) setSearchTerm(storedSearchTerm);
+    if (storedRating) setRating(storedRating);
+    if (storedRegion) setRegion(storedRegion);
+  }, []);
 
   // Categories
   const categories = [
@@ -76,7 +75,7 @@ useEffect(() => {
     sessionStorage.setItem("region", region);
     sessionStorage.setItem("rating", rating);
   }, [searchTerm, category, region, rating]);
-  
+
   useEffect(() => {
     const savedPosition = sessionStorage.getItem("scrollPosition");
     const savedSearch = sessionStorage.getItem("searchTerm");
@@ -86,22 +85,18 @@ useEffect(() => {
 
     isLoadedFromStorage.current = true;
 
-    setTimeout(()=>{
+    setTimeout(() => {
       if (savedSearch) setSearchTerm(savedSearch);
       if (savedRegion) setRegion(savedRegion);
       if (savedRating) setRating(savedRating);
       if (savedCategory) setCategory(savedCategory);
-    
+
       if (savedPosition) {
         window.scrollTo(0, parseInt(savedPosition));
         sessionStorage.removeItem("scrollPosition");
       }
-    }, 1000)
-  
-    
+    }, 1000);
   }, []);
-  
-  
 
   useEffect(() => {
     const fetchColleges = async () => {
@@ -132,12 +127,14 @@ useEffect(() => {
     if (page < totalPages) {
       setPage(page + 1);
     }
+    scrollTo(0,300)
   };
 
   const handlePrev = () => {
     if (page > 1) {
       setPage(page - 1);
     }
+    scrollTo(0,300)
   };
 
   useEffect(() => {
@@ -168,7 +165,7 @@ useEffect(() => {
     setPage(1);
     setPaginatedColleges(filtered.slice(0, ITEMS_PER_PAGE));
     setTotalPages(Math.ceil(filtered.length / ITEMS_PER_PAGE));
-    scrollTo(0, 500)
+    scrollTo(0, 500);
   }, [colleges, category, searchTerm, rating, region, isLoadedFromStorage]);
 
   return (
@@ -294,12 +291,14 @@ useEffect(() => {
                   )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-md:gap-y-3 gap-y-8 gap-x-3">
                     {paginatedColleges.map((college: any) => (
-                      <CollegeCard 
-                      searchTerm={searchTerm}
-                      region={region}
-                      rating={rating}
-                      category={category}
-                      key={college.id} {...college} />
+                      <CollegeCard
+                        searchTerm={searchTerm}
+                        region={region}
+                        rating={rating}
+                        category={category}
+                        key={college.id}
+                        {...college}
+                      />
                     ))}
                   </div>
                 </TabsContent>
