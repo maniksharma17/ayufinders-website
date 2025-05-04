@@ -95,7 +95,7 @@ export default function CollegesPage() {
         window.scrollTo(0, parseInt(savedPosition));
         sessionStorage.removeItem("scrollPosition");
       }
-    }, 1000);
+    }, 2000);
   }, []);
 
   useEffect(() => {
@@ -127,14 +127,14 @@ export default function CollegesPage() {
     if (page < totalPages) {
       setPage(page + 1);
     }
-    scrollTo(0,300)
+    scrollTo(0,10)
   };
 
   const handlePrev = () => {
     if (page > 1) {
       setPage(page - 1);
     }
-    scrollTo(0,300)
+    scrollTo(0,10)
   };
 
   useEffect(() => {
