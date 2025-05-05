@@ -19,7 +19,7 @@ const Banner: React.FC<BannerProps> = ({
 }) => {
   return (
     <div className='max-md:px-4'>
-    <div className={cn("md:mt-8 banner shadow-sm md:shadow-xl rounded-2xl container mx-auto flex flex-col md:flex-row justify-center", className)}>
+    <div className={cn("md:mt-8 banner shadow-lg md:shadow-xl rounded-2xl container mx-auto flex flex-col md:flex-row justify-center", className)}>
       <div className='w-full h-1/2 md:h-full relative'>
         <Image
           src={imageUrl}
@@ -30,13 +30,13 @@ const Banner: React.FC<BannerProps> = ({
         />
       </div>
       
-      <div className="banner-content tracking-tight bg-gradient-to-b from-slate-100 via-gray-300 to-primary/70">
+      <div className="banner-content tracking-tight bg-gradient-to-b from-slate-100 via-gray-200 md:via-gray-300 to-primary/40 md:to-primary/70">
         <div className='w-full'>
           <h1 className="text-2xl text-gray-700 md:text-4xl lg:text-5xl font-bold mb-4 max-w-4xl">
             {title}
           </h1>
           {subtitle && (
-            <p className="text-lg text-white md:text-xl max-w-3xl mb-8">
+            <p className="text-lg text-black md:text-xl max-w-3xl mb-8">
               {subtitle}
             </p>
           )}

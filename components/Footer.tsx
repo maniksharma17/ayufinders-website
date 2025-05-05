@@ -59,18 +59,18 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/"
+                  href="/bams"
                   className="text-gray-300 hover:text-white transition-colors"
                 >
-                  Home
+                  BAMS
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/colleges"
+                  href="/neet"
                   className="text-gray-300 hover:text-white transition-colors"
                 >
-                  Colleges
+                  NEET 2025
                 </Link>
               </li>
               <li>
@@ -83,28 +83,21 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/latest-updates"
+                  href="/about-us"
                   className="text-gray-300 hover:text-white transition-colors"
                 >
-                  Latest Updates
+                  About Us
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/question-papers"
+                  href="/why-choose-us"
                   className="text-gray-300 hover:text-white transition-colors"
                 >
-                  Question Papers
+                  Why Choose Us?
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/job-updates"
-                  className="text-gray-300 hover:text-white transition-colors"
-                >
-                  Job Updates
-                </Link>
-              </li>
+              
             </ul>
           </div>
 
