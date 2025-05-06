@@ -1,3 +1,4 @@
+import CTA from "@/components/CTA";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -74,16 +75,7 @@ export default function BamsSyllabusPage() {
         </Card>
 
         {/* CTA Section */}
-        <section className="bg-primary/5 rounded-2xl p-8 md:p-12 text-center">
-          <h2 className="text-3xl font-bold mb-4">Need Help with Your BAMS Journey?</h2>
-          <p className="max-w-2xl mx-auto mb-6 text-muted-foreground">
-            Our team of experts is ready to guide you through the process of finding the right college, 
-            preparing for admissions, and planning your career in Ayurvedic medicine.
-          </p>
-          <Button size="lg" className="rounded-full px-8">
-            Get Expert Counselling
-          </Button>
-        </section>
+        <CTA />
       </section>
 
       {/* Syllabus Table */}

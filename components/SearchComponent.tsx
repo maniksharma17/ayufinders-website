@@ -6,6 +6,7 @@ import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Search, X } from 'lucide-react';
 import SearchBar from './SearchBar';
 import { cn } from '@/lib/utils'; // utility to merge classNames (optional)
+import { useRouter } from 'next/navigation';
 
 export default function SearchComponent() {
   const [search, setSearch] = useState('');
@@ -41,6 +42,8 @@ export default function SearchComponent() {
     return () => clearTimeout(delay);
   }, [search]);
 
+  const router = useRouter();
+
   return (
     <>
       {/* Trigger bar */}
@@ -61,7 +64,7 @@ export default function SearchComponent() {
 
       {/* Command Box */}
       {open && (
-        <div className="fixed inset-0 max-md:px-4 bg-primary/30 flex items-center justify-center z-50">
+        <div className="fixed inset-0 max-md:px-4 bg-gray-500/20 flex items-center justify-center z-50">
           <div className="w-full max-w-xl bg-white rounded-xl shadow-lg overflow-hidden">
             {/* Search Input with X */}
             <div className="relative">
@@ -85,6 +88,9 @@ export default function SearchComponent() {
                 results.map((college: any) => (
                   <div
                     key={college.id}
+                    onClick={()=>{
+                      router.push(`/colleges/${college.id}`)
+                    }}
                     className="flex gap-4 items-center px-4 py-3 border-b text-left hover:bg-gray-100 transition-all cursor-pointer"
                   >
                     <Avatar className="w-10 h-10 bg-gray-400">

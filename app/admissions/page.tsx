@@ -28,6 +28,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import CTA from "@/components/CTA";
 
 export default function AdmissionsPage() {
   const [colleges, setColleges] = useState<any[]>([]);
@@ -197,6 +198,9 @@ export default function AdmissionsPage() {
               </ul>
             </CardContent>
           </Card>
+
+          {/** CTA */}
+          <CTA />
         </section>
 
         {/* Overview Section */}
@@ -560,7 +564,7 @@ export default function AdmissionsPage() {
                     <li className="p-3 bg-muted rounded-lg">
                       <h4 className="font-semibold">Round 2</h4>
                       <p className="text-sm">
-                        For candidates who didn't get a seat or want to upgrade
+                        For candidates who didn&apos;t get a seat or want to upgrade
                       </p>
                     </li>
                     <li className="p-3 bg-muted rounded-lg">
@@ -618,7 +622,12 @@ export default function AdmissionsPage() {
               </Card>
             </div>
           </div>
+
+          {/** CTA */}
+        <CTA />
         </section>
+
+        
 
         {/* Requirements for Counselling */}
         <section className="mb-16">
@@ -1173,7 +1182,7 @@ export default function AdmissionsPage() {
                 <p>
                   For government Ayurvedic/Unani/Homeopathy colleges, deposit
                   Rs. 20,000 as security money. For private sector colleges,
-                  it's Rs. 50,000. If applying to both government and private
+                  it&apos;s Rs. 50,000. If applying to both government and private
                   sector, deposit Rs. 50,000. Deposit earnest money during
                   registration.
                 </p>
@@ -1202,6 +1211,9 @@ export default function AdmissionsPage() {
               </CardContent>
             </CardHeader>
           </Card>
+
+          {/** CTA */}
+          <CTA />
         </section>
 
         {/* BAMS Colleges Section */}
@@ -1318,7 +1330,7 @@ export default function AdmissionsPage() {
                 private hospitals, set up their own clinics, join Ayurvedic
                 pharmaceutical companies, pursue teaching careers, work in
                 wellness centers and spas, or pursue higher education (MD/MS) in
-                Ayurveda. There's also growing demand internationally as
+                Ayurveda. There&apos;s also growing demand internationally as
                 interest in alternative medicine increases.
               </AccordionContent>
             </AccordionItem>
@@ -1330,7 +1342,7 @@ export default function AdmissionsPage() {
               <AccordionContent>
                 As per the regulations, candidates must be at least 17 years of
                 age as of December 31st of the admission year. There is
-                typically no upper age limit for BAMS admissions, but it's
+                typically no upper age limit for BAMS admissions, but it&apos;s
                 advisable to check the latest guidelines from the National
                 Commission for Indian System of Medicine (NCISM).
               </AccordionContent>
@@ -1339,16 +1351,7 @@ export default function AdmissionsPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="bg-primary/5 rounded-2xl p-8 md:p-12 text-center">
-          <h2 className="text-3xl font-bold mb-4">Need Admission Guidance?</h2>
-          <p className="max-w-2xl mx-auto mb-6 text-muted-foreground">
-            Our counsellors can help you navigate the BAMS admission process,
-            from NEET preparation to college selection.
-          </p>
-          <Button size="lg" className="rounded-full px-8">
-            Book a Counselling Session
-          </Button>
-        </section>
+        <CTA />
       </div>
     </div>
   );

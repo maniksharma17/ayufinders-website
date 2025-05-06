@@ -1,4 +1,6 @@
 "use client";
+import CTA from "@/components/CTA";
+import GeneralSkeleton from "@/components/Loader";
 import SectionHeading from "@/components/SectionHeading";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +14,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { ChevronLeft, Star } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -19,27 +22,37 @@ const CollegeDetailsPage = () => {
   const router = useRouter();
   const params = useParams();
   const { id } = params;
+  const [loading, setLoading] = useState(true)
 
   const [college, setCollege] = useState<College | null>(null);
   const [relatedColleges, setRelatedColleges] = useState([]);
   const [images, setImages] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState(college?.image);
 
+
   useEffect(() => {
+    setLoading(true)
     const fetchCollege = async () => {
-      const res = await fetch(`/api/get-college-by-id?id=${id}`);
-      const data = await res.json();
-      setCollege(data[0]);
-      const gallery = [
-        data[0].image,
-        data[0].gallery1,
-        data[0].gallery2,
-        data[0].gallery3,
-        data[0].gallery4,
-        data[0].gallery5,
-      ];
-      setImages(gallery);
-      setSelectedImage(gallery[0]);
+      try{
+        const res = await fetch(`/api/get-college-by-id?id=${id}`);
+        const data = await res.json();
+        setCollege(data[0]);
+        const gallery = [
+          data[0].image,
+          data[0].gallery1,
+          data[0].gallery2,
+          data[0].gallery3,
+          data[0].gallery4,
+          data[0].gallery5,
+        ];
+        setImages(gallery);
+        setSelectedImage(gallery[0]);
+      } catch (e){
+        console.log(e)
+      } finally {
+        setLoading(false)
+      }
+      
     };
 
     fetchCollege();
@@ -55,6 +68,8 @@ const CollegeDetailsPage = () => {
     };
     fetchRelatedColleges();
   }, [college]);
+
+  if (loading) return <GeneralSkeleton count={3} classname="container mx-auto mt-20 py-20 px-8"/>
 
   return (
     <main className="mt-20 lg:px-4 lg:py-12 py-8 flex flex-col gap-y-8 min-h-screen">
@@ -254,33 +269,22 @@ const CollegeDetailsPage = () => {
             <CardTitle>Students also viewed</CardTitle>
           </CardHeader>
           <CardContent>
-            {relatedColleges.map((college: any) => {
+            {relatedColleges.map((college: any, index: number) => {
               return (
-                <div
-                  key={college.id}
-                  className="border-b py-2 hover:text-primary cursor-pointer"
-                >
-                  {college.title}
-                </div>
+                <Link key={college.id} href={`/colleges/${college.id}`}>
+                  <div
+                    className="border-b flex flex-row gap-4 py-2 hover:text-primary cursor-pointer"
+                  >
+                    <p className="font-bold text-primary">{index+1} </p><p>{college.title}</p>
+                  </div>
+                </Link>
               );
             })}
           </CardContent>
         </Card>
       </div>
-      {/* CTA Section */}
-      <section className="container mx-auto bg-primary/5 rounded-2xl p-8 md:p-12 text-center">
-        <h2 className="text-3xl font-bold mb-4">
-          Need Help with Your BAMS Journey?
-        </h2>
-        <p className="max-w-2xl mx-auto mb-6 text-muted-foreground">
-          Our team of experts is ready to guide you through the process of
-          finding the right college, preparing for admissions, and planning your
-          career in Ayurvedic medicine.
-        </p>
-        <Button size="lg" className="rounded-full px-8">
-          Get Expert Counselling
-        </Button>
-      </section>
+      {/** CTA */}
+      <CTA />
     </main>
   );
 };

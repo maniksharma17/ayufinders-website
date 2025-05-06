@@ -17,6 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import SectionHeading from "@/components/SectionHeading";
+import CTA from "@/components/CTA";
 
 interface Update {
   id: number;
@@ -291,7 +292,11 @@ export default function LatestUpdatesPage() {
             </div>
           </div>
         </div>
+        {/** CTA */}
+        <CTA />
       </div>
+
+      
     </div>
   );
 }

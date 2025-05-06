@@ -38,7 +38,7 @@ const LocationCard: React.FC<LocationCardProps> = ({
         <div>
           <h3 className="text-xl font-bold">{category}</h3>
         </div>
-        <Badge className="bg-gray-300 w-fit flex items-center gap-2 mt-3 text-sm">
+        <Badge className="bg-transparent border-gray-300 hover:bg-transparent w-fit flex items-center gap-2 mt-3 text-sm">
           <School className="h-4 w-4 text-black" />
           <span className='text-black'>{college_count} Colleges</span>
         </Badge>

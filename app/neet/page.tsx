@@ -1,14 +1,13 @@
 "use client";
 
 import {
-  AlertTriangle,
   Info,
   GraduationCap,
   BookOpenCheck,
 } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import SectionHeading from "@/components/SectionHeading";
-import { Button } from "@/components/ui/button";
+import CTA from "@/components/CTA";
 
 export default function NEETInfoSection() {
   return (
@@ -210,26 +209,8 @@ export default function NEETInfoSection() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
-                <Info className="text-pink-600" />
-                <h3>NEET Counseling Process</h3>
-              </CardTitle>
-            </CardHeader>
-          <CardContent>
-            <p>
-              Confused about NEET admission, college selection, or counseling?
-              Connect with our experts for free one-on-one guidance.
-            </p>
-            
-          </CardContent>
-          <CardFooter>
-          <Button className="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md text-sm">
-              Enquire Now
-            </Button>
-          </CardFooter>
-        </Card>
+        {/** CTA */}
+        <CTA/>
       </div>
     </section>
   );

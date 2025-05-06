@@ -1,5 +1,7 @@
 "use client";
 
+import CTA from "@/components/CTA";
+import GeneralSkeleton from "@/components/Loader";
 import SectionHeading from "@/components/SectionHeading";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +12,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ChevronLeft, MapPin, Briefcase, CalendarDays, Phone } from "lucide-react";
-import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -18,17 +19,24 @@ const JobDetailsPage = () => {
   const router = useRouter();
   const params = useParams();
   const { id } = params;
+  const [loading, setLoading] = useState(true)
 
   const [job, setJob] = useState<Job | null>(null);
   const [relatedJobs, setRelatedJobs] = useState<Job[]>([]);
 
   useEffect(() => {
-    const fetchJob = async () => {
-      const res = await fetch(`/api/get-job-by-id?id=${id}`);
-      const data = await res.json();
-      setJob(data[0]);
-    };
-    fetchJob();
+    try{
+      const fetchJob = async () => {
+        const res = await fetch(`/api/get-job-by-id?id=${id}`);
+        const data = await res.json();
+        setJob(data[0]);
+      };
+      fetchJob();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
 
   useEffect(() => {
@@ -39,6 +47,8 @@ const JobDetailsPage = () => {
     };
     fetchRelatedJobs();
   }, [job]);
+
+  if (loading) return <GeneralSkeleton count={3} classname="container mx-auto mt-20 py-20 px-8"/>
 
   return (
     <main className="mt-20 lg:py-16 min-h-screen">
@@ -61,7 +71,7 @@ const JobDetailsPage = () => {
         <div className="w-full grid grid-cols-[0.8fr_2fr] max-lg:flex max-lg:flex-col-reverse gap-6">
 
           {/* Related Jobs Section */}
-          <div className="lg:sticky top-24 max-h-[60vh]">
+          <div className="lg:sticky top-24 max-h-[80vh]">
             <Card>
               <CardHeader>
                 <CardTitle className="text-primary">More Jobs</CardTitle>
@@ -125,18 +135,7 @@ const JobDetailsPage = () => {
         </div>
 
         {/* CTA Section */}
-        <section className="mt-20 bg-primary/5 rounded-2xl p-8 md:p-12 text-center">
-          <h2 className="text-3xl font-bold mb-4 text-primary">
-            Need Help with Your BAMS Journey?
-          </h2>
-          <p className="max-w-2xl mx-auto mb-6 text-muted-foreground">
-            Our experts can guide you through job applications, exam preparation,
-            and career paths in Ayurvedic medicine.
-          </p>
-          <Button size="lg" className="rounded-full px-8 bg-primary text-white hover:bg-primary/90">
-            Get Expert Counselling
-          </Button>
-        </section>
+        <CTA/>
       </div>
     </main>
   );

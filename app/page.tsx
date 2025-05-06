@@ -1,13 +1,8 @@
+"use client";
 import { 
   getStudentTestimonials,
-  getJobUpdatesHome,
-  getLatestUpdatesHome,
-  getCollegesHome,
-  getPlacesHome,
-  searchColleges
-} from '@/lib/db';
+} from '@/lib/data';
 import Banner from '@/components/Banner';
-import SearchBar from '@/components/SearchBar';
 import SectionHeading from '@/components/SectionHeading';
 import CollegeCard from '@/components/CollegeCard';
 import UpdateCard from '@/components/UpdateCard';
@@ -18,22 +13,41 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import SearchComponent from '@/components/SearchComponent';
+import CTA from '@/components/CTA';
+import { useEffect, useState } from 'react';
 
-export default async function Home() {
-  // Fetch data
-  const jobUpdatesHome = await getJobUpdatesHome();
-  const latestJobsResult = Array.isArray(jobUpdatesHome) ? jobUpdatesHome : [];
+export default function Home() {
 
-  const latestUpdates = await getLatestUpdatesHome();
-  const latestUpdatesResult = Array.isArray(latestUpdates) ? latestUpdates : [];
+  const [latestJobsResult, setLatestJobsResult] = useState([]);
+  const [latestUpdatesResult, setLatestUpdatesResult] = useState([]);
+  const [topCollegesResult, setTopCollegesResult] = useState([]);
+  const [topLocationsResult, setTopLocationsResult] = useState([]);
+  const [testimonials, setTestimonials] = useState<{ id: number; name: string; college: string; year: string; testimony: string; rating: number; }[]>([]);
 
-  const topColleges = await getCollegesHome();
-  const topCollegesResult = Array.isArray(topColleges) ? topColleges : [];
+  useEffect(()=>{
+    const fetchData = async () => {
+      const jobsResponse = await fetch('/api/get-jobs-home');
+      const jobs = await jobsResponse.json();
+      setLatestJobsResult(jobs)
 
-  const topLocations = await getPlacesHome();
-  const topLocationsResult = Array.isArray(topLocations) ? topLocations : [];
+      const updatesResponse = await fetch('/api/get-updates-home');
+      const updates = await updatesResponse.json();
+      setLatestUpdatesResult(updates);
 
-  const testimonials = await getStudentTestimonials();
+      const collegesResult = await fetch('/api/get-colleges-home');
+      const colleges = await collegesResult.json();
+      setTopCollegesResult(colleges);
+
+      const locationsResult = await fetch('/api/get-locations-home');
+      const locations = await locationsResult.json();
+      setTopLocationsResult(locations);
+
+      const testimonials = getStudentTestimonials();
+      setTestimonials(testimonials);
+    }
+
+    fetchData();
+  }, [])
 
 
   return (
@@ -99,7 +113,7 @@ export default async function Home() {
         </section>
 
         {/* Top Colleges Section */}
-        <section className="shadow-lg max-md:p-4 mb-20 bg-gradient-to-b to-primary/80 via-primary/40 from-gray-100 md:p-12 rounded-2xl">
+        <section className="shadow-lg max-md:py-10 max-md:px-4 mb-20 max-lg:bg-primary lg:bg-gradient-to-b lg:to-primary lg:via-primary/60 lg:from-primary/5 border md:p-12 rounded-2xl">
           <SectionHeading 
             title="Top BAMS Colleges" 
             subtitle="Discover India's premier institutions for Ayurvedic medicine"
@@ -114,7 +128,7 @@ export default async function Home() {
           
           <div className="flex justify-center mt-10">
             <Link href="/colleges">
-              <Button size="lg" className='bg-black px-10 py-2 font-normal text-lg'>Explore All Colleges</Button>
+              <Button size="lg" className='bg-black px-10 py-2 font-normal text-lg hover:bg-black/80'>Explore All Colleges</Button>
             </Link>
           </div>
         </section>
@@ -143,16 +157,7 @@ export default async function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="bg-primary/5 rounded-2xl p-8 md:p-12 text-center">
-          <h2 className="text-3xl font-bold mb-4">Need Help with Your BAMS Journey?</h2>
-          <p className="max-w-2xl mx-auto mb-6 text-muted-foreground">
-            Our team of experts is ready to guide you through the process of finding the right college, 
-            preparing for admissions, and planning your career in Ayurvedic medicine.
-          </p>
-          <Button size="lg" className="rounded-full px-8">
-            Get Expert Counselling
-          </Button>
-        </section>
+        <CTA />
       </div>
     </div>
   );

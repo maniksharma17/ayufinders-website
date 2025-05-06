@@ -14,7 +14,8 @@ import SearchComponent from "@/components/SearchComponent";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import CTA from "@/components/CTA";
+import GeneralSkeleton from "@/components/Loader";
 
 interface College {
   id: number;
@@ -31,6 +32,8 @@ interface College {
 }
 
 export default function CollegesPage() {
+
+  const [loading, setLoading] = useState(false)
   const [colleges, setColleges] = useState<College[]>([]);
   const [filteredColleges, setFilteredColleges] = useState<College[]>([]);
 
@@ -43,6 +46,10 @@ export default function CollegesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [rating, setRating] = useState("All");
   const [region, setRegion] = useState("All");
+
+  useEffect(()=>{
+    setLoading(true)
+  }, [])
 
   useEffect(() => {
     const storedCategory = sessionStorage.getItem("category");
@@ -95,11 +102,12 @@ export default function CollegesPage() {
         window.scrollTo(0, parseInt(savedPosition));
         sessionStorage.removeItem("scrollPosition");
       }
-    }, 2000);
-  }, [paginatedColleges]);
+    }, 1500);
+  }, []);
 
   useEffect(() => {
     const fetchColleges = async () => {
+      setLoading(true)
       try {
         const response = await fetch("/api/get-colleges");
         if (!response.ok) {
@@ -111,6 +119,8 @@ export default function CollegesPage() {
         setTotalPages(Math.ceil(data.length / ITEMS_PER_PAGE));
       } catch (error) {
         console.error("Error fetching updates:", error);
+      } finally {
+        setLoading(false)
       }
     };
     fetchColleges();
@@ -284,10 +294,8 @@ export default function CollegesPage() {
               {/* College Cards */}
               {categories.map((cat) => (
                 <TabsContent key={cat} value={cat.toLowerCase()}>
-                  {paginatedColleges.length === 0 && (
-                    <div className="mx-auto w-full text-gray-700 font-medium">
-                      No colleges found
-                    </div>
+                  {loading && (
+                    <GeneralSkeleton count={1}/>
                   )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-md:gap-y-3 gap-y-8 gap-x-3">
                     {paginatedColleges.map((college: any) => (
@@ -330,21 +338,10 @@ export default function CollegesPage() {
             </div>
           </div>
         </div>
+        {/** CTA */}
+        <CTA />
       </div>
-      {/* CTA Section */}
-      <section className="container mx-auto mb-6 bg-primary/5 rounded-2xl p-8 md:p-12 text-center">
-        <h2 className="text-3xl font-bold mb-4">
-          Need Help with Your BAMS Journey?
-        </h2>
-        <p className="max-w-2xl mx-auto mb-6 text-muted-foreground">
-          Our team of experts is ready to guide you through the process of
-          finding the right college, preparing for admissions, and planning your
-          career in Ayurvedic medicine.
-        </p>
-        <Button size="lg" className="rounded-full px-8">
-          Get Expert Counselling
-        </Button>
-      </section>
+      
     </div>
   );
 }

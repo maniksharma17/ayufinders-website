@@ -1,4 +1,5 @@
 "use client";
+import CTA from "@/components/CTA";
 import SectionHeading from "@/components/SectionHeading";
 import { Button } from "@/components/ui/button";
 import {
@@ -65,13 +66,13 @@ const CollegeDetailsPage = () => {
       <div className="mx-auto container px-4 flex flex-col gap-8">
         <div className="w-full grid grid-cols-[0.8fr_2fr] max-lg:flex max-lg:flex-col-reverse gap-6">
           {/* Related Blogs */}
-          <div className="lg:sticky top-24 max-h-[60vh]">
+          <div className="lg:sticky top-24 max-h-[50vh]">
           <Card>
             <CardHeader>
               <CardTitle>Read more updates</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col gap-2 overflow-y-scroll max-h-[60vh]">
+              <div className="flex flex-col gap-2 overflow-y-scroll max-h-[40vh]">
                 {relatedBlogs.map((blog) => {
                   return <div onClick={()=>{router.push(`/latest-updates/${blog?.id}`)}} key={blog?.id} className="border-b cursor-pointer">{blog?.title}</div>
                 })}
@@ -108,19 +109,7 @@ const CollegeDetailsPage = () => {
         </div>
 
         {/* CTA Section */}
-        <section className="mt-20 bg-primary/5 rounded-2xl p-8 md:p-12 text-center">
-          <h2 className="text-3xl font-bold mb-4">
-            Need Help with Your BAMS Journey?
-          </h2>
-          <p className="max-w-2xl mx-auto mb-6 text-muted-foreground">
-            Our team of experts is ready to guide you through the process of
-            finding the right college, preparing for admissions, and planning your
-            career in Ayurvedic medicine.
-          </p>
-          <Button size="lg" className="rounded-full px-8">
-            Get Expert Counselling
-          </Button>
-        </section>
+        <CTA/>
 
       </div>
 

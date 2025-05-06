@@ -18,33 +18,39 @@ const Banner: React.FC<BannerProps> = ({
   className,
 }) => {
   return (
-    <div className='max-md:px-4'>
-    <div className={cn("md:mt-8 banner shadow-lg md:shadow-xl rounded-2xl container mx-auto flex flex-col md:flex-row justify-center", className)}>
-      <div className='w-full h-1/2 md:h-full relative'>
-        <Image
-          src={imageUrl}
-          className="w-full h-full object-cover z-50"
-          width={500}
-          height={300}
-          alt={title}
-        />
-      </div>
-      
-      <div className="banner-content tracking-tight bg-gradient-to-b from-slate-100 via-gray-200 md:via-gray-300 to-primary/40 md:to-primary/70">
-        <div className='w-full'>
-          <h1 className="text-2xl text-gray-700 md:text-4xl lg:text-5xl font-bold mb-4 max-w-4xl">
-            {title}
-          </h1>
-          {subtitle && (
-            <p className="text-lg text-black md:text-xl max-w-3xl mb-8">
-              {subtitle}
-            </p>
-          )}
-          {children}
+    <div className="max-md:px-4 bg-primary py-12">
+      <div
+        className={cn(
+          "banner shadow-lg md:shadow-none rounded-2xl container mx-auto flex flex-col md:flex-row justify-center overflow-hidden",
+          className
+        )}
+      >
+        {/* Image Section */}
+        <div className="w-full md:h-auto h-1/2 md:w-1/2 relative">
+          <Image
+            src={imageUrl}
+            className="w-full h-full object-cover"
+            width={800}
+            height={500}
+            alt={title}
+          />
         </div>
-        
+
+        {/* Content Section */}
+        <div className="w-full md:w-1/2 md:px-20 px-4 h-1/2 md:h-full flex flex-col justify-center bg-slate-50">
+          <div className="max-w-2xl">
+            <h1 className="text-3xl text-primary md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+              {title}
+            </h1>
+            {subtitle && (
+              <p className="text-lg md:text-xl text-gray-700 mb-6">
+                {subtitle}
+              </p>
+            )}
+            {children}
+          </div>
+        </div>
       </div>
-    </div>
     </div>
   );
 };

@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/select';
 
 import { FileText, Download, Clock, Calendar, BookOpen } from 'lucide-react';
+import CTA from '@/components/CTA';
 
 export default function QuestionPapersPage() {
 
@@ -156,7 +157,8 @@ export default function QuestionPapersPage() {
           }
         </div>
         
-        
+        {/* Contact Section */}
+        <CTA/>
         
         {/* Helpful Resources */}
         <section className="mt-20">
@@ -261,15 +263,7 @@ export default function QuestionPapersPage() {
           </div>
         </section>
         
-        {/* Contact Section */}
-        <section className="mt-16 bg-card shadow-sm rounded-lg p-8 text-center">
-          <h2 className="text-2xl font-bold mb-3">Need Specific Question Papers?</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
-            If you&apos;re looking for specific question papers that aren&apos;t available on our website, 
-            our team can help you find them.
-          </p>
-          <Button>Contact Our Academic Team</Button>
-        </section>
+        
       </div>
     </div>
   );

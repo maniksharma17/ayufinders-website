@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Briefcase, MapPin, Building, CalendarClock } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import CTA from '@/components/CTA';
+import GeneralSkeleton from '@/components/Loader';
 
 interface Job {
   id: number;
@@ -34,6 +36,7 @@ export default function JobUpdatesPage() {
   const [totalPages, setTotalPages] = useState(0);
   const ITEMS_PER_PAGE = 15;
   const [paginatedJobs, setPaginatedJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -48,6 +51,8 @@ export default function JobUpdatesPage() {
         setTotalPages(Math.ceil(data.length / ITEMS_PER_PAGE));
       } catch (error) {
         console.error("Error fetching updates:", error);
+      } finally {
+        setLoading(false)
       }
     };
 
@@ -98,6 +103,7 @@ export default function JobUpdatesPage() {
     setPaginatedJobs(filtered.slice(0, ITEMS_PER_PAGE));
   }, [jobs, searchTerm, location]);
   
+  if (loading) return <GeneralSkeleton count={3} classname="container mx-auto mt-20 py-20 px-8"/>
   
   return (
     <div className="mt-20 flex flex-col min-h-screen">
@@ -176,8 +182,6 @@ export default function JobUpdatesPage() {
                 </CardContent>
               </Card>
               </div>
-            
-
             </div>
 
             {/* Job Tabs */}
@@ -195,7 +199,7 @@ export default function JobUpdatesPage() {
             
             
             {/* Pagination */}
-            <div className="md:mb-10 flex justify-center mt-10">
+            <div className="md:mb-2 flex justify-center mt-10">
               <nav className="flex items-center space-x-2">
                 <button 
                   onClick={handlePrev}
@@ -213,6 +217,9 @@ export default function JobUpdatesPage() {
               </nav>
             </div>
           </div>
+
+          {/* Skill Development CTA */}
+          <CTA/>
           
           {/* Sidebar */}
           <div className="w-full grid md:grid-cols-2 md:gap-8">
@@ -384,18 +391,7 @@ export default function JobUpdatesPage() {
             </Card>
           </div>
           
-          {/* Skill Development CTA */}
-          <div className="mt-12 p-8 rounded-lg bg-card shadow-sm text-center">
-            <h3 className="text-xl font-bold mb-4">Enhance Your Employability</h3>
-            <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
-              Develop additional skills to stand out in the competitive job market. Our partners offer specialized 
-              courses for BAMS graduates.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button>Explore Courses</Button>
-              <Button variant="outline">Career Counselling</Button>
-            </div>
-          </div>
+          
         </section>
       </div>
     </div>

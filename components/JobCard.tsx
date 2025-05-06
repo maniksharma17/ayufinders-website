@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Building2, MapPin, Calendar, IndianRupee, CalendarIcon, ArrowRight } from 'lucide-react';
+import { Building2, MapPin, Calendar, IndianRupee, CalendarIcon, ArrowRight, ChevronRight, ChevronRightCircle } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from './ui/button';
 
 interface JobCardProps {
   id: number;
@@ -37,7 +38,7 @@ const JobCard: React.FC<JobCardProps> = ({
   const jobDivision = jobTitle[1] ? jobTitle[1].trim() : '';
   return (
     <Card className="hover:shadow-md transition-all">
-      <CardHeader className="bg-gray-100 text-primary rounded-t-md">
+      <CardHeader className="bg-gray-100 rounded-t-md">
         <div className="flex justify-between items-start">
           <CardTitle className="text-lg">
             {jobRole} - <br></br>
@@ -46,7 +47,7 @@ const JobCard: React.FC<JobCardProps> = ({
         </div>
       </CardHeader>
       <CardContent className="space-y-2 py-4 md:min-h-[120px]">
-        <div dangerouslySetInnerHTML={{ __html: job_description.slice(0,110) }} className="text-sm font-semibold" />
+        <div dangerouslySetInnerHTML={{ __html: job_description.slice(0,100) }} className="text-sm font-semibold" />
         <div className="flex items-center gap-2 text-muted-foreground">
           <MapPin className="h-4 w-4" />
           <span>{job_location}</span>
@@ -61,7 +62,7 @@ const JobCard: React.FC<JobCardProps> = ({
       </CardContent>
       <CardFooter className='py-3 rounded-b-md'>
         <Link href={`/job-updates/${id}`} className="w-full">
-          <button className="float-right hover:bg-primary/90 w-fit text-sm bg-primary text-white py-1 px-6 font-light rounded-full">View <ArrowRight className='w-4 h-4 text-white inline'/></button>
+          <Button className="flex flex-row items-center justify-center gap-2 bg-primary text-white text-sm hover:bg-primary/80 w-fit px-4 py-1 font-medium rounded-full duration-300 transition-all"><p>View Job</p> <ChevronRight className='w-4 h-4 duration-300 transition-all hover:text-white inline' strokeWidth={2} /></Button>
         </Link>
       </CardFooter>
     </Card>
