@@ -220,7 +220,7 @@ export default function JobUpdatesPage() {
           </div>
 
           {/* Skill Development CTA */}
-          <CTA/>
+          <CTA showDialog={false}/>
           
           {/* Sidebar */}
           <div className="w-full grid md:grid-cols-2 md:gap-8">
