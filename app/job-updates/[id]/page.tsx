@@ -210,7 +210,7 @@ const JobDetailsPage = () => {
                       onClick={() => setOpen(true)}
                       className="bg-green-500 hover:bg-green-600 text-white"
                     >
-                      Get Counselling Support
+                      Apply for Job
                     </Button>
                     <DialogContent className="sm:max-w-md px-4">
                       <DialogHeader>
@@ -279,7 +279,7 @@ const JobDetailsPage = () => {
                             }}
                             autoFocus={false}
                             id="query"
-                            rows={2}
+                            rows={1}
                             placeholder="Ask any question or simply leave a message for us"
                           />
                         </div>
