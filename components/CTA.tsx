@@ -31,8 +31,9 @@ export default function CounselingSection() {
   });
 
   useEffect(() => {
+    const filled = sessionStorage.getItem("filled");
     const timer = setInterval(() => {
-      if(!hasSubmitted) setOpen(true);
+      if(!hasSubmitted || (filled!="1")) setOpen(true);
     }, 10000);
 
     return () => {
@@ -62,6 +63,7 @@ export default function CounselingSection() {
         setFormData({ name: "", email: "", phone: "", message: "" });
         setOpen(false)
         setHasSubmitted(true)
+        sessionStorage.setItem("filled", "1");
       } else {
         throw new Error("Failed to submit");
       }
