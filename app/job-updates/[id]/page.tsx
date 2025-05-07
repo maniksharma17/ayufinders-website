@@ -11,7 +11,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChevronLeft, MapPin, Briefcase, CalendarDays, Phone } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  ChevronLeft,
+  MapPin,
+  Briefcase,
+  CalendarDays,
+  Phone,
+} from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -19,13 +36,71 @@ const JobDetailsPage = () => {
   const router = useRouter();
   const params = useParams();
   const { id } = params;
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   const [job, setJob] = useState<Job | null>(null);
   const [relatedJobs, setRelatedJobs] = useState<Job[]>([]);
 
+  const [open, setOpen] = useState(false);
+  const [formLoading, setFormLoading] = useState(false)
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
   useEffect(() => {
-    try{
+    const filled = sessionStorage.getItem("filled");
+    const timer = setInterval(() => {
+      if (filled != "1") setOpen(true);
+    }, 10000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [hasSubmitted]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.phone ||
+      !formData.message
+    ) {
+      return;
+    }
+
+    try {
+      setFormLoading(true);
+      const url =
+        "https://script.google.com/macros/s/AKfycbxQSOp7-J1p-31eUPGi0Ks7EKnBWbLSL7cEzRnbrvECBDlf79fJ8wAbBQjqjNbOaKxf/exec";
+      const res = await fetch(url, {
+        method: "POST",
+        body: `Name=${formData.name}&Email=${formData.email}&Phone=${formData.phone}&Message=${formData.message}`,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
+
+      if (res.ok) {
+        setFormData({ name: "", email: "", phone: "", message: "" });
+        setOpen(false);
+        setHasSubmitted(true);
+        sessionStorage.setItem("filled", "1");
+      } else {
+        throw new Error("Failed to submit");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    try {
       const fetchJob = async () => {
         const res = await fetch(`/api/get-job-by-id?id=${id}`);
         const data = await res.json();
@@ -48,16 +123,19 @@ const JobDetailsPage = () => {
     fetchRelatedJobs();
   }, [job]);
 
-  if (loading) return <GeneralSkeleton count={3} classname="container mx-auto mt-20 py-20 px-8"/>
+  if (loading)
+    return (
+      <GeneralSkeleton
+        count={3}
+        classname="container mx-auto mt-20 py-20 px-8"
+      />
+    );
 
   return (
     <main className="mt-20 lg:py-16 min-h-screen">
       {/* Header with Back Button */}
       <div className="w-full mb-4 px-4 container mx-auto flex flex-row gap-6 items-center justify-start max-lg:sticky top-0 max-sm:z-50 max-sm:py-6 bg-gray-50">
-        <Button
-          variant={"outline"}
-          onClick={() => router.back()}
-        >
+        <Button variant={"outline"} onClick={() => router.back()}>
           <ChevronLeft className="h-4 w-4 text-gray-600" /> Back
         </Button>
         <SectionHeading
@@ -69,7 +147,6 @@ const JobDetailsPage = () => {
 
       <div className="mx-auto container px-4 py-8 lg:py-16 flex flex-col gap-8">
         <div className="w-full grid grid-cols-[0.8fr_2fr] max-lg:flex max-lg:flex-col-reverse gap-6">
-
           {/* Related Jobs Section */}
           <div className="lg:sticky top-24 max-h-[80vh]">
             <Card>
@@ -103,8 +180,6 @@ const JobDetailsPage = () => {
                   <MapPin className="w-4 h-4" />
                   {job?.job_location}
                 </CardDescription>
-
-                
               </CardHeader>
 
               <CardContent className="max-w-[95vh] lg:max-w-[60vw] space-y-4 text-[15px]">
@@ -117,17 +192,109 @@ const JobDetailsPage = () => {
 
                 <div
                   className="prose prose-blue custom-strong-tag custom-blog-table"
-                  dangerouslySetInnerHTML={{ __html: job?.job_description || "" }}
+                  dangerouslySetInnerHTML={{
+                    __html: job?.job_description || "",
+                  }}
                 />
 
                 <div className="flex flex-col md:flex-row justify-end gap-4 mt-6">
-                  <Button variant={"link"} className="rounded-full px-4">
-                    <Phone className="w-4 h-4 mr-2" />
-                    Contact Us
-                  </Button>
-                  <Button variant={"outline"} className="rounded-full px-6">
-                    Apply Now
-                  </Button>
+                  <a href="tel:+918881820484">
+                    <Button variant={"link"} className="rounded-full px-4">
+                      <Phone className="w-4 h-4 mr-2" />
+                      Contact Us
+                    </Button>
+                  </a>
+
+                  <Dialog open={open} onOpenChange={setOpen}>
+                    <Button
+                      onClick={() => setOpen(true)}
+                      className="bg-green-500 hover:bg-green-600 text-white"
+                    >
+                      Get Counselling Support
+                    </Button>
+                    <DialogContent className="sm:max-w-md px-4">
+                      <DialogHeader>
+                        <DialogTitle>Get Counselling Support</DialogTitle>
+                        <DialogDescription>
+                          Fill in your details and our team will contact you
+                          soon.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid gap-2">
+                          <Label htmlFor="name">Name</Label>
+                          <Input
+                            value={formData.name}
+                            onChange={(e) => {
+                              setFormData({
+                                ...formData,
+                                name: e.target.value,
+                              });
+                            }}
+                            autoFocus={false}
+                            id="name"
+                            placeholder="Your full name"
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="phone">Phone</Label>
+                          <Input
+                            value={formData.phone}
+                            onChange={(e) => {
+                              setFormData({
+                                ...formData,
+                                phone: e.target.value,
+                              });
+                            }}
+                            autoFocus={false}
+                            id="phone"
+                            placeholder="+91 9876543210"
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="email">Email</Label>
+                          <Input
+                            value={formData.email}
+                            onChange={(e) => {
+                              setFormData({
+                                ...formData,
+                                email: e.target.value,
+                              });
+                            }}
+                            autoFocus={false}
+                            id="email"
+                            type="email"
+                            placeholder="you@example.com"
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="email">Query</Label>
+                          <Textarea
+                            value={formData.message}
+                            onChange={(e) => {
+                              setFormData({
+                                ...formData,
+                                message: e.target.value,
+                              });
+                            }}
+                            autoFocus={false}
+                            id="query"
+                            rows={2}
+                            placeholder="Ask any question or simply leave a message for us"
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button
+                          onClick={handleSubmit}
+                          type="submit"
+                          className="bg-green-500 hover:bg-green-600 text-white"
+                        >
+                          {formLoading ? "Sending..." : "Send"}
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </CardContent>
             </Card>
@@ -135,7 +302,7 @@ const JobDetailsPage = () => {
         </div>
 
         {/* CTA Section */}
-        <CTA/>
+        <CTA />
       </div>
     </main>
   );
