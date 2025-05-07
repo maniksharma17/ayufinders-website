@@ -32,7 +32,7 @@ export default function CounselingSection() {
     const hasSubmitted = sessionStorage.getItem("formSubmitted");
     if (hasSubmitted !== "1") {
       const timer = setTimeout(() => {
-        setOpen(true);
+        setOpen(prev => !prev);
       }, 5000);
   
       return () => clearTimeout(timer); // clean up
