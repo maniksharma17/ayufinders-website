@@ -75,13 +75,15 @@ const Navbar = () => {
           </div>
 
           {/* Call Button */}
-          <Button
-            className="hover:bg-gradient-to-r text-gray-100 transition-all duration-300 ease-in-out cursor-pointer from-primary to-gray-400 hidden lg:flex items-center font-light text-lg gap-2 rounded-full"
-            size="lg"
-          >
-            <Phone className="h-5 w-5" />
-            <span>Contact us</span>
-          </Button>
+          <a href="tel:+918881820484">
+            <Button
+              className="hover:bg-gradient-to-r text-gray-100 transition-all duration-300 ease-in-out cursor-pointer from-primary to-gray-400 hidden lg:flex items-center font-light text-lg gap-2 rounded-full"
+              size="lg"
+            >
+              <Phone className="h-5 w-5" />
+              <span>Contact us</span>
+            </Button>
+          </a>
 
           {/* Mobile Navigation */}
           <div className="flex lg:hidden">

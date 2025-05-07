@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import CTA from '@/components/CTA';
 import GeneralSkeleton from '@/components/Loader';
+import Link from 'next/link';
 
 interface Job {
   id: number;
@@ -144,7 +145,7 @@ export default function JobUpdatesPage() {
               </div>
               
               <div className="flex flex-wrap gap-4">
-                <Button>View Details</Button>
+                <Link href={"/job-updates/"+jobs[0]?.id}><Button>View Details</Button></Link>
                 <Button variant="outline">Apply Now</Button>
               </div>
             </div>

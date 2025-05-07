@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/card";
 import SectionHeading from "@/components/SectionHeading";
 import CTA from "@/components/CTA";
+import GeneralSkeleton from "@/components/Loader";
 
 interface Update {
   id: number;
@@ -36,6 +37,7 @@ export default function LatestUpdatesPage() {
   const [totalPages, setTotalPages] = useState(0);
   const ITEMS_PER_PAGE = 6;
   const [paginatedUpdates, setPaginatedUpdates] = useState<Update[]>([]);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchUpdates = async () => {
@@ -50,6 +52,8 @@ export default function LatestUpdatesPage() {
         setTotalPages(Math.ceil(data.length / ITEMS_PER_PAGE));
       } catch (error) {
         console.error("Error fetching updates:", error);
+      } finally {
+        setLoading(false)
       }
     };
     fetchUpdates();
@@ -97,6 +101,8 @@ export default function LatestUpdatesPage() {
     "NEET",
     "News",
   ];
+
+  if(loading) return <GeneralSkeleton count={3} classname={"mt-20 container mx-auto py-20"} />
 
   return (
     <div className="mt-20 flex flex-col min-h-screen">

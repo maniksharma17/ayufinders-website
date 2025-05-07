@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, Phone, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,13 +16,45 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "./ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
 export default function CounselingSection() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
   
+    if (!formData.name || !formData.email || !formData.phone || !formData.message) {
+      toast({ title: "Error", description: "All fields are required!", variant: "destructive" });
+      return;
+    }
+  
+    try {
+      const url = "https://script.google.com/macros/s/AKfycbxeMCAHoRl9gCAX3s1y7PyNrmw8O-4O2MbieNPJiNOT6-glq_4JgizTRKgpWrKbjB-YWg/exec"
+      const res = await fetch(url, {
+        method: "POST",
+        body: (`Name=${formData.name}&Email=${formData.email}&Phone=${formData.phone}&Message=${formData.message}`),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
+  
+      if (res.ok) {
+        toast({ title: "Message Sent", description: "We will get back to you soon!" });
+        setFormData({ name: "", email: "", phone: "", message: "" });
+      } else {
+        throw new Error("Failed to submit");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <section className="container mx-auto px-4 py-16">
@@ -49,23 +81,31 @@ export default function CounselingSection() {
                 <div className="grid gap-4 py-4">
                   <div className="grid gap-2">
                     <Label htmlFor="name">Name</Label>
-                    <Input autoFocus={false} id="name" placeholder="Your full name" />
+                    <Input onChange={(e)=>{
+                      setFormData({...formData, name: e.target.value})
+                    }} autoFocus={false} id="name" placeholder="Your full name" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="phone">Phone</Label>
-                    <Input autoFocus={false} id="phone" placeholder="+91 9876543210" />
+                    <Input onChange={(e)=>{
+                      setFormData({...formData, phone: e.target.value})
+                    }} autoFocus={false} id="phone" placeholder="+91 9876543210" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input autoFocus={false} id="email" type="email" placeholder="you@example.com" />
+                    <Input onChange={(e)=>{
+                      setFormData({...formData, email: e.target.value})
+                    }} autoFocus={false} id="email" type="email" placeholder="you@example.com" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="email">Query</Label>
-                    <Textarea autoFocus={false} id="query" rows={2} placeholder="Ask any question or simply leave a message for us" />
+                    <Textarea onChange={(e)=>{
+                      setFormData({...formData, message: e.target.value})
+                    }} autoFocus={false} id="query" rows={2} placeholder="Ask any question or simply leave a message for us" />
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button type="submit" className="bg-green-500 hover:bg-green-600 text-white">
+                  <Button onClick={handleSubmit} type="submit" className="bg-green-500 hover:bg-green-600 text-white">
                     Submit
                   </Button>
                 </DialogFooter>

@@ -15,8 +15,11 @@ import { ChevronRight } from 'lucide-react';
 import SearchComponent from '@/components/SearchComponent';
 import CTA from '@/components/CTA';
 import { useEffect, useState } from 'react';
+import GeneralSkeleton from '@/components/Loader';
 
 export default function Home() {
+
+  const [loading, setLoading] = useState(true)
 
   const [latestJobsResult, setLatestJobsResult] = useState([]);
   const [latestUpdatesResult, setLatestUpdatesResult] = useState([]);
@@ -26,30 +29,37 @@ export default function Home() {
 
   useEffect(()=>{
     const fetchData = async () => {
-      const jobsResponse = await fetch('/api/get-jobs-home');
-      const jobs = await jobsResponse.json();
-      setLatestJobsResult(jobs)
-
-      const updatesResponse = await fetch('/api/get-updates-home');
-      const updates = await updatesResponse.json();
-      setLatestUpdatesResult(updates);
-
-      const collegesResult = await fetch('/api/get-colleges-home');
-      const colleges = await collegesResult.json();
-      setTopCollegesResult(colleges);
-
-      const locationsResult = await fetch('/api/get-locations-home');
-      const locations = await locationsResult.json();
-      setTopLocationsResult(locations);
-
-      const testimonials = getStudentTestimonials();
-      setTestimonials(testimonials);
+      try{
+        const jobsResponse = await fetch('/api/get-jobs-home');
+        const jobs = await jobsResponse.json();
+        setLatestJobsResult(jobs)
+  
+        const updatesResponse = await fetch('/api/get-updates-home');
+        const updates = await updatesResponse.json();
+        setLatestUpdatesResult(updates);
+  
+        const collegesResult = await fetch('/api/get-colleges-home');
+        const colleges = await collegesResult.json();
+        setTopCollegesResult(colleges);
+  
+        const locationsResult = await fetch('/api/get-locations-home');
+        const locations = await locationsResult.json();
+        setTopLocationsResult(locations);
+  
+        const testimonials = getStudentTestimonials();
+        setTestimonials(testimonials);
+      } catch (e){
+        console.log(e);
+      } finally {
+        setLoading(false)
+      }
+      
     }
 
     fetchData();
   }, [])
 
-
+  if(loading) return <GeneralSkeleton count={3} classname={"mt-20 container mx-auto py-20"} />
   return (
     <div className="mt-20 flex flex-col min-h-screen">
       {/* Hero Banner */}
