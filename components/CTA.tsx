@@ -28,15 +28,17 @@ export default function CounselingSection() {
     message: "",
   });
 
-  useEffect(()=>{
-    const hasSubmitted =  sessionStorage.getItem("formSubmitted");
-    if(hasSubmitted != "1") {
-      setTimeout(()=>{
-        setOpen(!open)
-      }, 20000)
+  useEffect(() => {
+    const hasSubmitted = sessionStorage.getItem("formSubmitted");
+    if (hasSubmitted !== "1") {
+      const timer = setTimeout(() => {
+        setOpen(true);
+      }, 20000);
+  
+      return () => clearTimeout(timer); // clean up
     }
-  }, [open])
-
+  }, []);
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
