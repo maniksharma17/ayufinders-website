@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, Phone, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,15 +27,18 @@ export default function CounselingSection() {
     phone: "",
     message: "",
   });
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const hasSubmitted = sessionStorage.getItem("formSubmitted");
     if (hasSubmitted !== "1") {
-      const timer = setTimeout(() => {
-        setOpen(prev => !prev);
+      const timer = setInterval(() => {
+        setOpen(true);
       }, 5000);
   
-      return () => clearTimeout(timer); // clean up
+      return () => {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      };
     }
   }, []);
   
@@ -59,7 +62,11 @@ export default function CounselingSection() {
       if (data.success) {
         toast({ title: "Message Sent", description: "We will get back to you soon!" });
         setFormData({ name: "", email: "", phone: "", message: "" });
-        sessionStorage.setItem("formSubmitted", "1")
+        sessionStorage.setItem("formSubmitted", "1");
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
       } else {
         throw new Error("Failed to submit");
       }
