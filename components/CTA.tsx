@@ -20,6 +20,8 @@ import { useToast } from "@/hooks/use-toast";
 export default function CounselingSection() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false)
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -27,30 +29,27 @@ export default function CounselingSection() {
     phone: "",
     message: "",
   });
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const hasSubmitted = sessionStorage.getItem("formSubmitted");
-    if (hasSubmitted !== "1") {
-      const timer = setInterval(() => {
-        setOpen(true);
-      }, 5000);
-  
-      return () => {
-        if (intervalRef.current) clearInterval(intervalRef.current);
-      };
-    }
-  }, []);
+    const timer = setInterval(() => {
+      if(!hasSubmitted) setOpen(true);
+    }, 10000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [hasSubmitted]);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+    
     if (!formData.name || !formData.email || !formData.phone || !formData.message) {
       toast({ title: "Error", description: "All fields are required!", variant: "destructive" });
       return;
     }
   
     try {
+      setLoading(true);
       const url = "https://script.google.com/macros/s/AKfycbw5mMU7CjYEE-4f3rASatokSxleFwb0Yzt7aoscM9e1M-YqrL2LpUQuW0BfS_nJx98FmQ/exec"
       const res = await fetch(url, {
         method: "POST",
@@ -61,16 +60,15 @@ export default function CounselingSection() {
       if (res.ok) {
         toast({ title: "Message Sent", description: "We will get back to you soon!" });
         setFormData({ name: "", email: "", phone: "", message: "" });
-        sessionStorage.setItem("formSubmitted", "1");
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current);
-          intervalRef.current = null;
-        }
+        setOpen(false)
+        setHasSubmitted(true)
       } else {
         throw new Error("Failed to submit");
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -132,7 +130,7 @@ export default function CounselingSection() {
                 </div>
                 <DialogFooter>
                   <Button onClick={handleSubmit} type="submit" className="bg-green-500 hover:bg-green-600 text-white">
-                    Submit
+                    {loading ? "Sending..." : "Send"}
                   </Button>
                 </DialogFooter>
               </DialogContent>
