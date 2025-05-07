@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, Phone, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -29,6 +28,15 @@ export default function CounselingSection() {
     message: "",
   });
 
+  useEffect(()=>{
+    const hasSubmitted =  sessionStorage.getItem("formSubmitted");
+    if(hasSubmitted != "1") {
+      setTimeout(()=>{
+        setOpen(!open)
+      }, 20000)
+    }
+  }, [open])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
@@ -44,10 +52,12 @@ export default function CounselingSection() {
         body: (`Name=${formData.name}&Email=${formData.email}&Phone=${formData.phone}&Message=${formData.message}`),
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
-  
-      if (res.ok) {
+      
+      const data = await res.json();
+      if (data.success) {
         toast({ title: "Message Sent", description: "We will get back to you soon!" });
         setFormData({ name: "", email: "", phone: "", message: "" });
+        sessionStorage.setItem("formSubmitted", "1")
       } else {
         throw new Error("Failed to submit");
       }
@@ -81,25 +91,33 @@ export default function CounselingSection() {
                 <div className="grid gap-4 py-4">
                   <div className="grid gap-2">
                     <Label htmlFor="name">Name</Label>
-                    <Input onChange={(e)=>{
+                    <Input 
+                    value={formData.name}
+                    onChange={(e)=>{
                       setFormData({...formData, name: e.target.value})
                     }} autoFocus={false} id="name" placeholder="Your full name" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="phone">Phone</Label>
-                    <Input onChange={(e)=>{
+                    <Input 
+                    value={formData.phone}
+                    onChange={(e)=>{
                       setFormData({...formData, phone: e.target.value})
                     }} autoFocus={false} id="phone" placeholder="+91 9876543210" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input onChange={(e)=>{
+                    <Input 
+                    value={formData.email}
+                    onChange={(e)=>{
                       setFormData({...formData, email: e.target.value})
                     }} autoFocus={false} id="email" type="email" placeholder="you@example.com" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="email">Query</Label>
-                    <Textarea onChange={(e)=>{
+                    <Textarea 
+                    value={formData.message}
+                    onChange={(e)=>{
                       setFormData({...formData, message: e.target.value})
                     }} autoFocus={false} id="query" rows={2} placeholder="Ask any question or simply leave a message for us" />
                   </div>
