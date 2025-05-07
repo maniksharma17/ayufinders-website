@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "./ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
-export default function CounselingSection() {
+export default function CounselingSection({showDialog=true}: {showDialog?: boolean}) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -33,13 +33,13 @@ export default function CounselingSection() {
   useEffect(() => {
     const filled = sessionStorage.getItem("filled");
     const timer = setInterval(() => {
-      if(filled!="1") setOpen(true);
+      if(filled!="1" && showDialog) setOpen(true);
     }, 10000);
 
     return () => {
       clearInterval(timer);
     };
-  }, [hasSubmitted]);
+  }, [hasSubmitted, showDialog]);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

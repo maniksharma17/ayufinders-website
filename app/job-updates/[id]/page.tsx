@@ -43,24 +43,15 @@ const JobDetailsPage = () => {
 
   const [open, setOpen] = useState(false);
   const [formLoading, setFormLoading] = useState(false)
-  const [hasSubmitted, setHasSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
     phone: "",
+    email: "",
     message: "",
+    department: "",
+    reference: "",
+    resume: ""
   });
-
-  useEffect(() => {
-    const filled = sessionStorage.getItem("filled");
-    const timer = setInterval(() => {
-      if (filled != "1") setOpen(true);
-    }, 10000);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, [hasSubmitted]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +60,9 @@ const JobDetailsPage = () => {
       !formData.name ||
       !formData.email ||
       !formData.phone ||
-      !formData.message
+      !formData.message ||
+      !formData.department ||
+      !formData.resume
     ) {
       return;
     }
@@ -80,15 +73,22 @@ const JobDetailsPage = () => {
         "https://script.google.com/macros/s/AKfycbxQSOp7-J1p-31eUPGi0Ks7EKnBWbLSL7cEzRnbrvECBDlf79fJ8wAbBQjqjNbOaKxf/exec";
       const res = await fetch(url, {
         method: "POST",
-        body: `Name=${formData.name}&Email=${formData.email}&Phone=${formData.phone}&Message=${formData.message}`,
+        body: `Name=${formData.name}&Email=${formData.email}&Phone=${formData.phone}&Message=${formData.message}&Department=${formData.department}&Reference=${formData.reference}&Resume=${formData.resume}`,
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
 
       if (res.ok) {
-        setFormData({ name: "", email: "", phone: "", message: "" });
+        setFormData({ 
+          name: "",
+          phone: "",
+          email: "",
+          message: "",
+          department: "",
+          reference: "",
+          resume: ""
+         });
         setOpen(false);
-        setHasSubmitted(true);
-        sessionStorage.setItem("filled", "1");
+
       } else {
         throw new Error("Failed to submit");
       }
@@ -214,7 +214,7 @@ const JobDetailsPage = () => {
                     </Button>
                     <DialogContent className="sm:max-w-md px-4">
                       <DialogHeader>
-                        <DialogTitle>Get Counselling Support</DialogTitle>
+                        <DialogTitle>Apply for Position</DialogTitle>
                         <DialogDescription>
                           Fill in your details and our team will contact you
                           soon.
@@ -268,7 +268,7 @@ const JobDetailsPage = () => {
                           />
                         </div>
                         <div className="grid gap-2">
-                          <Label htmlFor="email">Query</Label>
+                          <Label htmlFor="email">Message</Label>
                           <Textarea
                             value={formData.message}
                             onChange={(e) => {
@@ -281,6 +281,54 @@ const JobDetailsPage = () => {
                             id="query"
                             rows={2}
                             placeholder="Ask any question or simply leave a message for us"
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="department">Department</Label>
+                          <Input
+                            value={formData.department}
+                            onChange={(e) => {
+                              setFormData({
+                                ...formData,
+                                department: e.target.value,
+                              });
+                            }}
+                            autoFocus={false}
+                            id="department"
+                            type="text"
+                            placeholder="Kriya Sharir, Rachna Sharir, etc"
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="department">Reference (Name/Code)</Label>
+                          <Input
+                            value={formData.reference}
+                            onChange={(e) => {
+                              setFormData({
+                                ...formData,
+                                reference: e.target.value,
+                              });
+                            }}
+                            autoFocus={false}
+                            id="reference"
+                            type="text"
+                            placeholder="Enter Reference Name or Code"
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="department">Resume Link</Label>
+                          <Input
+                            value={formData.resume}
+                            onChange={(e) => {
+                              setFormData({
+                                ...formData,
+                                resume: e.target.value,
+                              });
+                            }}
+                            autoFocus={false}
+                            id="resume"
+                            type="url"
+                            placeholder="Enter Google Drive Link (Accessible to everyone)"
                           />
                         </div>
                       </div>
@@ -302,7 +350,7 @@ const JobDetailsPage = () => {
         </div>
 
         {/* CTA Section */}
-        <CTA />
+        <CTA showDialog={false} />
       </div>
     </main>
   );
