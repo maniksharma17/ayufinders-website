@@ -38,7 +38,7 @@ export default function CounselingSection() {
     }
   
     try {
-      const url = "https://script.google.com/macros/s/AKfycbxeMCAHoRl9gCAX3s1y7PyNrmw8O-4O2MbieNPJiNOT6-glq_4JgizTRKgpWrKbjB-YWg/exec"
+      const url = "https://script.google.com/macros/s/AKfycbw5mMU7CjYEE-4f3rASatokSxleFwb0Yzt7aoscM9e1M-YqrL2LpUQuW0BfS_nJx98FmQ/exec"
       const res = await fetch(url, {
         method: "POST",
         body: (`Name=${formData.name}&Email=${formData.email}&Phone=${formData.phone}&Message=${formData.message}`),
