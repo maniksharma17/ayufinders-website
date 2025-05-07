@@ -33,7 +33,7 @@ export default function CounselingSection() {
     if (hasSubmitted !== "1") {
       const timer = setTimeout(() => {
         setOpen(true);
-      }, 20000);
+      }, 5000);
   
       return () => clearTimeout(timer); // clean up
     }
