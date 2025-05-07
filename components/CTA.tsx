@@ -58,8 +58,7 @@ export default function CounselingSection() {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
       
-      const data = await res.json();
-      if (data.success) {
+      if (res.ok) {
         toast({ title: "Message Sent", description: "We will get back to you soon!" });
         setFormData({ name: "", email: "", phone: "", message: "" });
         sessionStorage.setItem("formSubmitted", "1");
